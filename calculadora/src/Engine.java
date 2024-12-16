@@ -2,10 +2,19 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
+
+import javafx.scene.layout.BorderWidths;
+
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Insets;
 
 /**
  * Clase que en la que se va a ejecuta toda la mecanica de la calculadora
@@ -79,6 +88,23 @@ public class Engine {
         this.reset = new JButton("C");
         // configuramos la ventana
         setSettings();
+        // Ponemos el estilo a los botnos
+        setFeaturesButton(this.n0, ButtonType.REGULAR);
+        setFeaturesButton(this.n1, ButtonType.REGULAR);
+        setFeaturesButton(this.n2, ButtonType.REGULAR);
+        setFeaturesButton(this.n3, ButtonType.REGULAR);
+        setFeaturesButton(this.n4, ButtonType.REGULAR);
+        setFeaturesButton(this.n5, ButtonType.REGULAR);
+        setFeaturesButton(this.n6, ButtonType.REGULAR);
+        setFeaturesButton(this.n7, ButtonType.REGULAR);
+        setFeaturesButton(this.n8, ButtonType.REGULAR);
+        setFeaturesButton(this.n9, ButtonType.REGULAR);
+        setFeaturesButton(this.add, ButtonType.OPERATOR);
+        setFeaturesButton(this.multiply, ButtonType.OPERATOR);
+        setFeaturesButton(this.subtract, ButtonType.OPERATOR);
+        setFeaturesButton(this.equal, ButtonType.OPERATOR);
+        setFeaturesButton(this.reset, ButtonType.OPERATOR);
+
     }
 
     /**
@@ -89,9 +115,12 @@ public class Engine {
         // Ponemos los layouts
         this.contentPanel.setLayout(new BorderLayout());
         this.displayPanel.setLayout(new FlowLayout());
-        this.buttonPanel.setLayout(new GridLayout(4, 4, 2, 5));
+        this.buttonPanel.setLayout(new GridLayout(4, 4, 10, 10));
         // setemaos tamaños
         this.display.setPreferredSize(new Dimension(800, 150));
+        this.display.setFont(new Font("Serif", Font.BOLD, 70));
+        this.display.setHorizontalAlignment(JTextField.RIGHT);
+        this.display.setBackground(new Color(0, 11, 88));
         // añimos panel de texto al display
         this.displayPanel.add(this.display);
         // añadimos los botones
@@ -107,15 +136,17 @@ public class Engine {
         this.buttonPanel.add(this.n2);
         this.buttonPanel.add(this.n3);
         this.buttonPanel.add(this.add);
-        this.buttonPanel.add(this.n0);
         this.buttonPanel.add(this.reset);
+        this.buttonPanel.add(this.n0);
         this.buttonPanel.add(this.equal);
+        this.buttonPanel.setBackground(new Color(0, 11, 88));
+        this.displayPanel.setBackground(new Color(0, 11, 88));
         this.contentPanel.add(this.display, BorderLayout.NORTH);
         this.contentPanel.add(this.buttonPanel, BorderLayout.CENTER);
         this.frame.add(this.contentPanel);
         this.frame.setVisible(true);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.frame.setSize(new Dimension(800, 1000));
+        this.frame.setSize(new Dimension(400, 600));
     }
 
     /**
@@ -126,6 +157,32 @@ public class Engine {
      *                las características
      */
     public void setFeaturesButton(JButton _button, ButtonType _type) {
+        if (_type.equals(ButtonType.OPERATOR)) {
+            _button.setBackground(new Color(0, 106, 103));
+            _button.setFont(new Font("", Font.ITALIC, 20));
+            _button.setBorder(new Border() {
 
+                @Override
+                public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+
+                }
+
+                @Override
+                public Insets getBorderInsets(Component c) {
+                    // TODO Auto-generated method stub
+                    throw new UnsupportedOperationException("Unimplemented method 'getBorderInsets'");
+                }
+
+                @Override
+                public boolean isBorderOpaque() {
+                    // TODO Auto-generated method stub
+                    throw new UnsupportedOperationException("Unimplemented method 'isBorderOpaque'");
+                }
+
+            });
+        } else {
+            _button.setBackground(new Color(255, 244, 183));
+            _button.setFont(new Font("", Font.ITALIC, 20));
+        }
     }
 }
