@@ -1,5 +1,6 @@
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -15,12 +16,15 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Clase que en la que se va a ejecuta toda la mecanica de la calculadora
  * 
  */
-public class Engine {
+public class Engine implements ActionListener {
     // Marco de la ventana
     private JFrame frame;
     // Panel general que ocupa toda la ventana
@@ -30,7 +34,7 @@ public class Engine {
     // Panel sur que contiene los botones
     private JPanel buttonPanel;
     // Display
-    private JTextField display;
+    private JLabel display;
     // Botones
     private JButton n0;
     private JButton n1;
@@ -48,6 +52,7 @@ public class Engine {
     private JButton add;
     private JButton equal;
     private JButton reset;
+    private JButton negative;
 
     // Tipos de boton
     private enum ButtonType {
@@ -57,6 +62,8 @@ public class Engine {
     // Almacenar temporalmente ciertos valores
     private int num1, num2, result;
     private char operation;
+
+    private String calculo;
 
     public Engine() {
         // Marco de la ventana
@@ -68,7 +75,7 @@ public class Engine {
         // Panel sur que contiene los botones
         this.buttonPanel = new JPanel();
         // Display
-        this.display = new JTextField("0");
+        this.display = new JLabel("0");
         // Botones
         this.n0 = new JButton("0");
         this.n1 = new JButton("1");
@@ -80,31 +87,17 @@ public class Engine {
         this.n7 = new JButton("7");
         this.n8 = new JButton("8");
         this.n9 = new JButton("9");
-        this.divide = new JButton("/");
-        this.multiply = new JButton("X");
-        this.subtract = new JButton("-");
-        this.add = new JButton("+");
+        this.divide = new JButton(" / ");
+        this.multiply = new JButton(" X ");
+        this.subtract = new JButton(" - ");
+        this.add = new JButton(" + ");
         this.equal = new JButton("=");
         this.reset = new JButton("C");
+        this.negative = new JButton("-");
+        this.calculo = "";
         // configuramos la ventana
         setSettings();
-        // Ponemos el estilo a los botnos
-        setFeaturesButton(this.n0, ButtonType.REGULAR);
-        setFeaturesButton(this.n1, ButtonType.REGULAR);
-        setFeaturesButton(this.n2, ButtonType.REGULAR);
-        setFeaturesButton(this.n3, ButtonType.REGULAR);
-        setFeaturesButton(this.n4, ButtonType.REGULAR);
-        setFeaturesButton(this.n5, ButtonType.REGULAR);
-        setFeaturesButton(this.n6, ButtonType.REGULAR);
-        setFeaturesButton(this.n7, ButtonType.REGULAR);
-        setFeaturesButton(this.n8, ButtonType.REGULAR);
-        setFeaturesButton(this.n9, ButtonType.REGULAR);
-        setFeaturesButton(this.add, ButtonType.OPERATOR);
-        setFeaturesButton(this.multiply, ButtonType.OPERATOR);
-        setFeaturesButton(this.subtract, ButtonType.OPERATOR);
-        setFeaturesButton(this.equal, ButtonType.OPERATOR);
-        setFeaturesButton(this.reset, ButtonType.OPERATOR);
-
+        addActionEvent();
     }
 
     /**
@@ -115,12 +108,13 @@ public class Engine {
         // Ponemos los layouts
         this.contentPanel.setLayout(new BorderLayout());
         this.displayPanel.setLayout(new FlowLayout());
-        this.buttonPanel.setLayout(new GridLayout(4, 4, 10, 10));
+        this.buttonPanel.setLayout(new GridLayout(5, 4, 10, 10));
         // setemaos tamaños
         this.display.setPreferredSize(new Dimension(800, 150));
         this.display.setFont(new Font("Serif", Font.BOLD, 70));
         this.display.setHorizontalAlignment(JTextField.RIGHT);
-        this.display.setBackground(new Color(0, 11, 88));
+        this.display.setForeground(new Color(255, 255, 255));
+        this.contentPanel.setBackground(new Color(0, 113, 45));
         // añimos panel de texto al display
         this.displayPanel.add(this.display);
         // añadimos los botones
@@ -138,15 +132,36 @@ public class Engine {
         this.buttonPanel.add(this.add);
         this.buttonPanel.add(this.reset);
         this.buttonPanel.add(this.n0);
+        this.buttonPanel.add(this.divide);
         this.buttonPanel.add(this.equal);
-        this.buttonPanel.setBackground(new Color(0, 11, 88));
-        this.displayPanel.setBackground(new Color(0, 11, 88));
+        this.buttonPanel.add(this.negative);
+        this.buttonPanel.setBackground(new Color(0, 113, 45));
+        this.displayPanel.setBackground(new Color(0, 113, 45));
         this.contentPanel.add(this.display, BorderLayout.NORTH);
         this.contentPanel.add(this.buttonPanel, BorderLayout.CENTER);
+        // añadimos el diseño
+        setFeaturesButton(this.n0, ButtonType.REGULAR);
+        setFeaturesButton(this.n1, ButtonType.REGULAR);
+        setFeaturesButton(this.n2, ButtonType.REGULAR);
+        setFeaturesButton(this.n3, ButtonType.REGULAR);
+        setFeaturesButton(this.n4, ButtonType.REGULAR);
+        setFeaturesButton(this.n5, ButtonType.REGULAR);
+        setFeaturesButton(this.n6, ButtonType.REGULAR);
+        setFeaturesButton(this.n7, ButtonType.REGULAR);
+        setFeaturesButton(this.n8, ButtonType.REGULAR);
+        setFeaturesButton(this.n9, ButtonType.REGULAR);
+        setFeaturesButton(this.add, ButtonType.OPERATOR);
+        setFeaturesButton(this.multiply, ButtonType.OPERATOR);
+        setFeaturesButton(this.subtract, ButtonType.OPERATOR);
+        setFeaturesButton(this.equal, ButtonType.OPERATOR);
+        setFeaturesButton(this.reset, ButtonType.OPERATOR);
+        setFeaturesButton(this.divide, ButtonType.OPERATOR);
+        setFeaturesButton(this.negative, ButtonType.REGULAR);
+        // configuracion de la ventana
         this.frame.add(this.contentPanel);
         this.frame.setVisible(true);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.frame.setSize(new Dimension(400, 600));
+        this.frame.setSize(new Dimension(400, 700));
     }
 
     /**
@@ -158,31 +173,77 @@ public class Engine {
      */
     public void setFeaturesButton(JButton _button, ButtonType _type) {
         if (_type.equals(ButtonType.OPERATOR)) {
-            _button.setBackground(new Color(0, 106, 103));
-            _button.setFont(new Font("", Font.ITALIC, 20));
-            _button.setBorder(new Border() {
-
-                @Override
-                public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-
-                }
-
-                @Override
-                public Insets getBorderInsets(Component c) {
-                    // TODO Auto-generated method stub
-                    throw new UnsupportedOperationException("Unimplemented method 'getBorderInsets'");
-                }
-
-                @Override
-                public boolean isBorderOpaque() {
-                    // TODO Auto-generated method stub
-                    throw new UnsupportedOperationException("Unimplemented method 'isBorderOpaque'");
-                }
-
-            });
+            _button.setBackground(new Color(255, 145, 0));
+            _button.setFont(new Font("", Font.BOLD, 20));
+            _button.setForeground(new Color(255, 251, 230));
         } else {
-            _button.setBackground(new Color(255, 244, 183));
-            _button.setFont(new Font("", Font.ITALIC, 20));
+            _button.setBackground(new Color(213, 237, 159));
+            _button.setFont(new Font("", Font.BOLD, 20));
+            _button.setForeground(new Color(0, 113, 45));
+        }
+    }
+
+    public void addActionEvent() {
+        this.n0.addActionListener(this);
+        this.n1.addActionListener(this);
+        this.n2.addActionListener(this);
+        this.n3.addActionListener(this);
+        this.n4.addActionListener(this);
+        this.n5.addActionListener(this);
+        this.n6.addActionListener(this);
+        this.n7.addActionListener(this);
+        this.n8.addActionListener(this);
+        this.n9.addActionListener(this);
+        this.add.addActionListener(this);
+        this.reset.addActionListener(this);
+        this.equal.addActionListener(this);
+        this.divide.addActionListener(this);
+        this.multiply.addActionListener(this);
+        this.subtract.addActionListener(this);
+        this.negative.addActionListener(this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        String input_text = e.getActionCommand();
+        // si el numero es igual a borrar o al igual lo coges , si no es ninguno de esos
+        // solo escribimos los que es
+        if (source.equals(this.reset)) {
+            this.display.setText("0");
+            this.calculo = "";
+        } else if (source.equals(this.equal)) {
+            String cadena[] = this.display.getText().split(" ");
+            this.num1 = Integer.parseInt(cadena[0]);
+            this.num2 = Integer.parseInt(cadena[2]);
+            this.operation = cadena[1].charAt(0);
+            operation();
+            this.calculo = this.result + "";
+            this.display.setText(this.calculo);
+
+        } else {
+            this.calculo += input_text;
+            this.display.setText(this.calculo);
+        }
+    }
+
+    public void operation() {
+        switch (this.operation) {
+            case 'X':
+                this.result = this.num1 * this.num2;
+                break;
+            case '/':
+                this.result = this.num1 / this.num2;
+                break;
+            case '+':
+                this.result = this.num1 + this.num2;
+                break;
+            case '-':
+                this.result = this.num1 - this.num2;
+                break;
+
+            default:
+                break;
         }
     }
 }
