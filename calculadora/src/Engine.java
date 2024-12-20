@@ -52,7 +52,7 @@ public class Engine implements ActionListener {
 
     // Almacenar temporalmente ciertos valores
     private int num1, num2, result;
-    private char operation;
+    private String operation;
     // String con los elemento para calcular
     private String calculo;
 
@@ -221,8 +221,8 @@ public class Engine implements ActionListener {
         } else if (source.equals(this.equal)) {
             String cadena[] = this.display.getText().split(" ");
             this.num1 = Integer.parseInt(cadena[0]);
-            this.num2 = Integer.parseInt(cadena[2]);
-            this.operation = cadena[1].charAt(0);
+            this.num2 = Integer.parseInt(cadena[cadena.length - 1]);
+            this.operation = cadena[1];
             operation();
             this.calculo = this.result + "";
             this.display.setText(this.calculo);
@@ -230,13 +230,7 @@ public class Engine implements ActionListener {
         } else if (source.equals(this.negative)) {
             String cadena[] = this.display.getText().split(" ");
             String cosota = "";
-            if (cadena.length < 3) {
-                cadena[0] = "-" + cadena[0];
-            } else {
-                cadena[2] = "-" + cadena[2];
-
-                System.out.println(cadena[2]);
-            }
+            cadena[cadena.length - 1] = "-" + cadena[cadena.length - 1];
 
             for (String string : cadena) {
                 cosota += string + " ";
@@ -254,16 +248,16 @@ public class Engine implements ActionListener {
      */
     public void operation() {
         switch (this.operation) {
-            case 'x':
+            case "x":
                 this.result = this.num1 * this.num2;
                 break;
-            case '/':
+            case "/":
                 this.result = this.num1 / this.num2;
                 break;
-            case '+':
+            case "+":
                 this.result = this.num1 + this.num2;
                 break;
-            case '-':
+            case "-":
                 this.result = this.num1 - this.num2;
                 break;
 
