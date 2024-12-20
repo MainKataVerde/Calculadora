@@ -3,26 +3,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-
-import javafx.scene.layout.BorderWidths;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
  * Clase que en la que se va a ejecuta toda la mecanica de la calculadora
- * 
  */
 public class Engine implements ActionListener {
     // Marco de la ventana
@@ -62,9 +53,12 @@ public class Engine implements ActionListener {
     // Almacenar temporalmente ciertos valores
     private int num1, num2, result;
     private char operation;
-
+    // String con los elemento para calcular
     private String calculo;
 
+    /**
+     * Contructora de Engine
+     */
     public Engine() {
         // Marco de la ventana
         this.frame = new JFrame("Calculadora");
@@ -88,12 +82,12 @@ public class Engine implements ActionListener {
         this.n8 = new JButton("8");
         this.n9 = new JButton("9");
         this.divide = new JButton(" / ");
-        this.multiply = new JButton(" X ");
+        this.multiply = new JButton(" x ");
         this.subtract = new JButton(" - ");
         this.add = new JButton(" + ");
         this.equal = new JButton("=");
         this.reset = new JButton("C");
-        this.negative = new JButton("-");
+        this.negative = new JButton("N");
         this.calculo = "";
         // configuramos la ventana
         setSettings();
@@ -156,7 +150,7 @@ public class Engine implements ActionListener {
         setFeaturesButton(this.equal, ButtonType.OPERATOR);
         setFeaturesButton(this.reset, ButtonType.OPERATOR);
         setFeaturesButton(this.divide, ButtonType.OPERATOR);
-        setFeaturesButton(this.negative, ButtonType.REGULAR);
+        setFeaturesButton(this.negative, ButtonType.OPERATOR);
         // configuracion de la ventana
         this.frame.add(this.contentPanel);
         this.frame.setVisible(true);
@@ -183,6 +177,10 @@ public class Engine implements ActionListener {
         }
     }
 
+    /**
+     * Este método registra los ActionListener para todos los botones de la
+     * aplicación
+     */
     public void addActionEvent() {
         this.n0.addActionListener(this);
         this.n1.addActionListener(this);
@@ -203,6 +201,14 @@ public class Engine implements ActionListener {
         this.negative.addActionListener(this);
     }
 
+    /**
+     * Metodo de la clase ActionListener , en este metodo vamos analizar que boton
+     * se ha pulsado y con eso sabremos que hacer dependiendo de que boton se ha
+     * pulsado
+     * 
+     * @param e Objeto ActionEvent en el que viene toda la informacion del boton que
+     *          hayamos pulsado
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -221,15 +227,34 @@ public class Engine implements ActionListener {
             this.calculo = this.result + "";
             this.display.setText(this.calculo);
 
+        } else if (source.equals(this.negative)) {
+            String cadena[] = this.display.getText().split(" ");
+            String cosota = "";
+            if (cadena.length < 3) {
+                cadena[0] = "-" + cadena[0];
+            } else {
+                cadena[2] = "-" + cadena[2];
+
+                System.out.println(cadena[2]);
+            }
+
+            for (String string : cadena) {
+                cosota += string + " ";
+            }
+            this.calculo = cosota;
+            this.display.setText(this.calculo);
         } else {
             this.calculo += input_text;
             this.display.setText(this.calculo);
         }
     }
 
+    /**
+     * Comprueba qué operación se debe realizar
+     */
     public void operation() {
         switch (this.operation) {
-            case 'X':
+            case 'x':
                 this.result = this.num1 * this.num2;
                 break;
             case '/':
@@ -245,5 +270,12 @@ public class Engine implements ActionListener {
             default:
                 break;
         }
+    }
+
+    /**
+     * Metodo que se encarga de mostrar el historial de las operaciones realizadas
+     */
+    public void history() {
+
     }
 }
