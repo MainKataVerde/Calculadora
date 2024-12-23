@@ -1,7 +1,10 @@
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,12 +23,24 @@ public class Engine implements ActionListener {
     private JFrame frame;
     // Panel general que ocupa toda la ventana
     private JPanel contentPanel;
+    // Panel Calculadora
+    private JPanel calculadoraPanel;
     // Panel norte que contiene el display
     private JPanel displayPanel;
     // Panel sur que contiene los botones
     private JPanel buttonPanel;
     // Display
     private JLabel display;
+    // Panel de historial
+    private JPanel historyPanel;
+    private JPanel historyPanelSur;
+    // Scroll del historial
+    private JScrollPane scroll;
+    // Botton "borrar historial" y "añadir al display"
+    private JButton clearHistory, addToDisplay;
+    // elementos del historial
+    private JList historyList;
+    private DefaultListModel<String> listModel;
     // Botones
     private JButton n0;
     private JButton n1;
@@ -64,12 +79,21 @@ public class Engine implements ActionListener {
         this.frame = new JFrame("Calculadora");
         // Panel general que ocupa toda la ventana
         this.contentPanel = new JPanel();
+        // Panel Calculadora
+        this.calculadoraPanel = new JPanel();
         // Panel norte que contiene el display
         this.displayPanel = new JPanel();
         // Panel sur que contiene los botones
         this.buttonPanel = new JPanel();
+        // Panel oeste que contiene el historial
+        this.historyPanel = new JPanel();
+        this.historyPanelSur = new JPanel();
         // Display
         this.display = new JLabel("0");
+        // lista de historial
+        this.listModel = new DefaultListModel<>();
+        this.historyList = new JList<>(this.listModel);
+        this.scroll = new JScrollPane(this.historyList);
         // Botones
         this.n0 = new JButton("0");
         this.n1 = new JButton("1");
@@ -89,6 +113,8 @@ public class Engine implements ActionListener {
         this.reset = new JButton("C");
         this.negative = new JButton("N");
         this.calculo = "";
+        this.addToDisplay = new JButton("Usar para calculo");
+        this.clearHistory = new JButton("Borrar historial");
         // configuramos la ventana
         setSettings();
         addActionEvent();
@@ -100,15 +126,31 @@ public class Engine implements ActionListener {
      */
     public void setSettings() {
         // Ponemos los layouts
-        this.contentPanel.setLayout(new BorderLayout());
+        this.contentPanel.setLayout(new GridLayout(1, 2, 5, 0));
+        this.calculadoraPanel.setLayout(new BorderLayout());
         this.displayPanel.setLayout(new FlowLayout());
         this.buttonPanel.setLayout(new GridLayout(5, 4, 10, 10));
         // setemaos tamaños
         this.display.setPreferredSize(new Dimension(800, 150));
         this.display.setFont(new Font("Serif", Font.BOLD, 70));
+        this.scroll.getViewport().getView().setBackground(new Color(0, 113, 45));
+        this.scroll.getViewport().getView().setFont(new Font("Serif", Font.BOLD, 50));
+        this.scroll.getViewport().getView().setForeground(new Color(255, 255, 255));
+        this.scroll.setBorder(null);
         this.display.setHorizontalAlignment(JTextField.RIGHT);
         this.display.setForeground(new Color(255, 255, 255));
-        this.contentPanel.setBackground(new Color(0, 113, 45));
+        this.calculadoraPanel.setBackground(new Color(0, 113, 45));
+        this.contentPanel.setBackground(new Color(0, 0, 0));
+        this.historyPanelSur.setBackground(new Color(0, 113, 45));
+        this.historyPanel.setBackground(new Color(0, 113, 45));
+        this.scroll.setPreferredSize(new Dimension(470, 390));
+        // configuramos el panel de historial
+        this.historyPanel.setLayout(new BorderLayout());
+        this.historyPanelSur.setLayout(new FlowLayout());
+        this.historyPanelSur.add(this.clearHistory);
+        this.historyPanelSur.add(this.addToDisplay);
+        this.historyPanel.add(this.historyPanelSur, BorderLayout.SOUTH);
+        this.historyPanel.add(this.scroll, BorderLayout.CENTER);
         // añimos panel de texto al display
         this.displayPanel.add(this.display);
         // añadimos los botones
@@ -131,8 +173,10 @@ public class Engine implements ActionListener {
         this.buttonPanel.add(this.negative);
         this.buttonPanel.setBackground(new Color(0, 113, 45));
         this.displayPanel.setBackground(new Color(0, 113, 45));
-        this.contentPanel.add(this.display, BorderLayout.NORTH);
-        this.contentPanel.add(this.buttonPanel, BorderLayout.CENTER);
+        this.calculadoraPanel.add(this.display, BorderLayout.NORTH);
+        this.calculadoraPanel.add(this.buttonPanel, BorderLayout.CENTER);
+        this.contentPanel.add(this.calculadoraPanel);
+        this.contentPanel.add(this.historyPanel);
         // añadimos el diseño
         setFeaturesButton(this.n0, ButtonType.REGULAR);
         setFeaturesButton(this.n1, ButtonType.REGULAR);
@@ -151,11 +195,13 @@ public class Engine implements ActionListener {
         setFeaturesButton(this.reset, ButtonType.OPERATOR);
         setFeaturesButton(this.divide, ButtonType.OPERATOR);
         setFeaturesButton(this.negative, ButtonType.OPERATOR);
+        setFeaturesButton(this.addToDisplay, ButtonType.OPERATOR);
+        setFeaturesButton(this.clearHistory, ButtonType.OPERATOR);
         // configuracion de la ventana
         this.frame.add(this.contentPanel);
         this.frame.setVisible(true);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.frame.setSize(new Dimension(400, 700));
+        this.frame.setSize(new Dimension(1000, 700));
     }
 
     /**
@@ -199,6 +245,8 @@ public class Engine implements ActionListener {
         this.multiply.addActionListener(this);
         this.subtract.addActionListener(this);
         this.negative.addActionListener(this);
+        this.clearHistory.addActionListener(this);
+        this.addToDisplay.addActionListener(this);
     }
 
     /**
@@ -211,32 +259,32 @@ public class Engine implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        String cadena[] = this.display.getText().split(" ");
         Object source = e.getSource();
         String input_text = e.getActionCommand();
-        // si el numero es igual a borrar o al igual lo coges , si no es ninguno de esos
-        // solo escribimos los que es
         if (source.equals(this.reset)) {
             this.display.setText("0");
             this.calculo = "";
         } else if (source.equals(this.equal)) {
-            String cadena[] = this.display.getText().split(" ");
             this.num1 = Integer.parseInt(cadena[0]);
             this.num2 = Integer.parseInt(cadena[cadena.length - 1]);
             this.operation = cadena[1];
             operation();
             this.calculo = this.result + "";
             this.display.setText(this.calculo);
-
+            this.listModel.addElement(this.num1 + " " + this.operation + " " + this.num2 + " = " + this.result);
         } else if (source.equals(this.negative)) {
-            String cadena[] = this.display.getText().split(" ");
             String cosota = "";
             cadena[cadena.length - 1] = "-" + cadena[cadena.length - 1];
 
             for (String string : cadena) {
                 cosota += string + " ";
             }
+
             this.calculo = cosota;
             this.display.setText(this.calculo);
+        } else if (source.equals(this.clearHistory)) {
+        } else if (source.equals(this.addToDisplay)) {
         } else {
             this.calculo += input_text;
             this.display.setText(this.calculo);
@@ -264,12 +312,5 @@ public class Engine implements ActionListener {
             default:
                 break;
         }
-    }
-
-    /**
-     * Metodo que se encarga de mostrar el historial de las operaciones realizadas
-     */
-    public void history() {
-
     }
 }
