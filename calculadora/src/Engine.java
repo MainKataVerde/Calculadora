@@ -1,3 +1,4 @@
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -6,19 +7,26 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * Clase que en la que se va a ejecuta toda la mecanica de la calculadora
  */
 public class Engine implements ActionListener {
+    DefaultListCellRenderer renderer = new DefaultListCellRenderer();
+    // Archivo con el historial
+    File historialFile;
     // Marco de la ventana
     private JFrame frame;
     // Panel general que ocupa toda la ventana
@@ -39,7 +47,7 @@ public class Engine implements ActionListener {
     // Botton "borrar historial" y "añadir al display"
     private JButton clearHistory, addToDisplay;
     // elementos del historial
-    private JList historyList;
+    private JList<String> historyList;
     private DefaultListModel<String> listModel;
     // Botones
     private JButton n0;
@@ -93,6 +101,8 @@ public class Engine implements ActionListener {
         // lista de historial
         this.listModel = new DefaultListModel<>();
         this.historyList = new JList<>(this.listModel);
+        renderer.setHorizontalAlignment(SwingConstants.CENTER);
+        this.historyList.setCellRenderer(renderer);
         this.scroll = new JScrollPane(this.historyList);
         // Botones
         this.n0 = new JButton("0");
@@ -126,7 +136,7 @@ public class Engine implements ActionListener {
      */
     public void setSettings() {
         // Ponemos los layouts
-        this.contentPanel.setLayout(new GridLayout(1, 2, 5, 0));
+        this.contentPanel.setLayout(new GridLayout(1, 2));
         this.calculadoraPanel.setLayout(new BorderLayout());
         this.displayPanel.setLayout(new FlowLayout());
         this.buttonPanel.setLayout(new GridLayout(5, 4, 10, 10));
@@ -135,6 +145,7 @@ public class Engine implements ActionListener {
         this.display.setFont(new Font("Serif", Font.BOLD, 70));
         this.scroll.getViewport().getView().setBackground(new Color(0, 113, 45));
         this.scroll.getViewport().getView().setFont(new Font("Serif", Font.BOLD, 50));
+        this.scroll.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         this.scroll.getViewport().getView().setForeground(new Color(255, 255, 255));
         this.scroll.setBorder(null);
         this.display.setHorizontalAlignment(JTextField.RIGHT);
@@ -284,7 +295,11 @@ public class Engine implements ActionListener {
             this.calculo = cosota;
             this.display.setText(this.calculo);
         } else if (source.equals(this.clearHistory)) {
+            this.listModel.clear();
         } else if (source.equals(this.addToDisplay)) {
+            String seleccion[] = this.listModel.getElementAt(this.historyList.getSelectedIndex()).split(" ");
+            this.calculo = seleccion[seleccion.length - 1];
+            this.display.setText(this.calculo);
         } else {
             this.calculo += input_text;
             this.display.setText(this.calculo);
