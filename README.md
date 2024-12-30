@@ -54,7 +54,7 @@ Aqui os mostrare un ejemplos de operaciones que la calculadora puede realizar.
 Primero que todo un pequeño vistazo de la interfaz grafica.
 <br>
 <br>
-<img src="./readme/Interfaz.png" width="300" height="200">
+![imagen](https://github.com/MainKataVerde/Calculadora/blob/main/readme/Interfaz.PNG)
 <br>
 <br>
 </center>
