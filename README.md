@@ -1,7 +1,8 @@
 <div align="center">
   <img src="./readme/calculatorCat.jpg" width="300" height="200">
-</div>  
-# Calculadora ☝🤓
+  
+  # Calculadora ☝🤓
+
 
 Esta es una calculdora sencilla con un historial de operaciones.
 
@@ -9,7 +10,7 @@ Esta es una calculdora sencilla con un historial de operaciones.
 
 Autor : **[Oscar Nzabarinda Mukeshimana](https://github.com/MainKataVerde)**
 
-</center>
+</div>  
 
 ## Lenguaje Usado
 
@@ -85,11 +86,14 @@ Como hemos visto en el ejemplo grafico anterior , el historial de operaciones se
 #### Numeros negativos
 
 <img src="./readme/Interfaz2.PNG" width="400" height="250">
-</div>
 
 En el primer ejemplo en el que usamos la calculadora se puede observa que usamos una tecla en la que pone "N" se usa para poner numero negativo , pero , ¿cómo funciona?
 
 Su funcionamiento es sencillo , primero hay que usar poner el numero y luego decidir si queremos que sea negativo o no
 
-<center>
 <img src="./readme/2024-12-30 22-59-14.gif" width="400" height="250">
+
+# GRACIAS POR LEER ESPERO QUE TE GUSTE MI CALCULADORA
+
+</div>
+
