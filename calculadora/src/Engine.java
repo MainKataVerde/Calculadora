@@ -279,7 +279,8 @@ public class Engine implements ActionListener {
         } else if (source.equals(this.equal)) {
             this.num1 = Integer.parseInt(cadena[0]);
             this.num2 = Integer.parseInt(cadena[cadena.length - 1]);
-            this.operation = cadena[1];
+            this.operation = cadena[cadena.length - 2];
+            System.out.println(this.num1 + "/" + this.operation + "/" + this.num2);
             operation();
             this.calculo = this.result + "";
             this.display.setText(this.calculo);
