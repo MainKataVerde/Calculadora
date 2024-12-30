@@ -31,21 +31,21 @@ El historial de operaciones se almacenan temporalmente en la maquina , eso quier
 Aqui os mostrare un ejemplos de operaciones que la calculadora puede realizar.
 
 ```
-2 ∗ −1
+2 ∗ (−1)
 -------
-−4/ − 4
+(−4)/ (−4)
 -------
 4 − 8
 -------
-−12 ∗ 7
+(−12) ∗ 7
 -------
-−6 − 9
+(−6) − 9
 -------
-−6 − −9
+(−6) − (−9)
 -------
 0/3
 -------
-−4 + −4
+(−4) + (−4)
 ```
 
 # Interfaz Grafica
@@ -54,7 +54,9 @@ Aqui os mostrare un ejemplos de operaciones que la calculadora puede realizar.
 Primero que todo un pequeño vistazo de la interfaz grafica.
 <br>
 <br>
-<img src="https://github.com/MainKataVerde/Calculadora/blob/main/readme/Interfaz.PNG" width="400" height="250">
+<div align="center">
+  <img  src="https://github.com/MainKataVerde/Calculadora/blob/main/readme/Interfaz.PNG" width="400" height="250">
+</div>  
 <br>
 <br>
 </center>
