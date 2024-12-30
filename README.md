@@ -1,6 +1,6 @@
-<center>
-<img src="./readme/calculatorCat.jpg" width="300" height="200">
-
+<div align="center">
+  <img src="./readme/calculatorCat.jpg" width="300" height="200">
+</div>  
 # Calculadora ☝🤓
 
 Esta es una calculdora sencilla con un historial de operaciones.
@@ -50,16 +50,14 @@ Aqui os mostrare un ejemplos de operaciones que la calculadora puede realizar.
 
 # Interfaz Grafica
 
-<center>
+<div align="center">
 Primero que todo un pequeño vistazo de la interfaz grafica.
 <br>
 <br>
-<div align="center">
   <img  src="https://github.com/MainKataVerde/Calculadora/blob/main/readme/Interfaz.PNG" width="400" height="250">
+<br>
+<br>
 </div>  
-<br>
-<br>
-</center>
 Como puedes ver , la calculadora tiene una paleta de colores verde y naranja , lo botones naranjas son los botones de operaciones y los botones verdes son los botones de los numeros.
 
 En el la parte derecha tenemos un historial de operaciones , que posteriormente explicaremos mas en detalle.
@@ -68,32 +66,26 @@ En el la parte derecha tenemos un historial de operaciones , que posteriormente 
 
 Aqui tenemos un ejemplo de uso de la calculadora.
 
-<center>
+<div align="center">
 <img src="./readme/2024-12-30 22-07-31.gif" width="400" height="250">
 <br>
 <br>
-</center>
 <hr>
-<center>
 Aqui tenemos un ejemplo de uso del historial de la calculadora.
 <br>
 <br>
 <img src="./readme/2024-12-30 22-14-52.gif" width="400" height="250">
-</center>
-<center>
 
 #### Historial de Operaciones
 
-</center>
 
 Como hemos visto en el ejemplo grafico anterior , el historial de operaciones se compone de dos botones uno que como se vio borra el historial y el otro importa el resultado de la oparacion seleccionada a la calculadora.
 
-<center>
 
 #### Numeros negativos
 
 <img src="./readme/Interfaz2.PNG" width="400" height="250">
-</center>
+</div>
 
 En el primer ejemplo en el que usamos la calculadora se puede observa que usamos una tecla en la que pone "N" se usa para poner numero negativo , pero , ¿cómo funciona?
 
