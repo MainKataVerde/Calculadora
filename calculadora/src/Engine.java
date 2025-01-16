@@ -1,6 +1,7 @@
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -8,9 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -60,6 +63,18 @@ public class Engine implements ActionListener {
     private JButton n7;
     private JButton n8;
     private JButton n9;
+    private JButton B2;
+    private JButton B8;
+    private JButton B10;
+    private JButton B16;
+    private JButton D;
+    private JButton E;
+    private JButton F;
+    private JButton A;
+    private JButton B;
+    private JButton C;
+    private JButton INFO;
+    private JButton Owner;
     private JButton divide;
     private JButton multiply;
     private JButton subtract;
@@ -70,11 +85,14 @@ public class Engine implements ActionListener {
 
     // Tipos de boton
     private enum ButtonType {
-        REGULAR, OPERATOR
+        REGULAR, OPERATOR, BASE, ESPCIAL, HEXADECIMAL
     }
 
     // Almacenar temporalmente ciertos valores
     private int num1, num2, result;
+    // MODO = 1 -> DECIMAL , MODO = 2 -> BINARIO , MODO = 3 -> OCTAL , MODO = 4 ->
+    // HEXADECIMAL
+    private int modo;
     private String operation;
     // String con los elemento para calcular
     private String calculo;
@@ -115,13 +133,25 @@ public class Engine implements ActionListener {
         this.n7 = new JButton("7");
         this.n8 = new JButton("8");
         this.n9 = new JButton("9");
+        this.B2 = new JButton("B2");
+        this.B8 = new JButton("B8");
+        this.B10 = new JButton("B10");
+        this.B16 = new JButton("B16");
+        this.D = new JButton("D");
+        this.E = new JButton("E");
+        this.F = new JButton("F");
+        this.A = new JButton("A");
+        this.B = new JButton("B");
+        this.C = new JButton("C");
         this.divide = new JButton(" / ");
         this.multiply = new JButton(" x ");
         this.subtract = new JButton(" - ");
         this.add = new JButton(" + ");
         this.equal = new JButton("=");
-        this.reset = new JButton("C");
+        this.reset = new JButton("R");
         this.negative = new JButton("N");
+        this.INFO = new JButton("INFO");
+        this.Owner = new JButton("Owner");
         this.calculo = "";
         this.addToDisplay = new JButton("Usar para calculo");
         this.clearHistory = new JButton("Borrar historial");
@@ -139,7 +169,7 @@ public class Engine implements ActionListener {
         this.contentPanel.setLayout(new GridLayout(1, 2));
         this.calculadoraPanel.setLayout(new BorderLayout());
         this.displayPanel.setLayout(new FlowLayout());
-        this.buttonPanel.setLayout(new GridLayout(5, 4, 10, 10));
+        this.buttonPanel.setLayout(new GridLayout(8, 4, 10, 10));
         // setemaos tamaños
         this.display.setPreferredSize(new Dimension(800, 150));
         this.display.setFont(new Font("Serif", Font.BOLD, 70));
@@ -165,6 +195,18 @@ public class Engine implements ActionListener {
         // añimos panel de texto al display
         this.displayPanel.add(this.display);
         // añadimos los botones
+        this.buttonPanel.add(this.B2);
+        this.buttonPanel.add(this.B8);
+        this.buttonPanel.add(this.B10);
+        this.buttonPanel.add(this.B16);
+        this.buttonPanel.add(this.D);
+        this.buttonPanel.add(this.E);
+        this.buttonPanel.add(this.F);
+        this.buttonPanel.add(this.INFO);
+        this.buttonPanel.add(this.A);
+        this.buttonPanel.add(this.B);
+        this.buttonPanel.add(this.C);
+        this.buttonPanel.add(this.Owner);
         this.buttonPanel.add(this.n7);
         this.buttonPanel.add(this.n8);
         this.buttonPanel.add(this.n9);
@@ -199,6 +241,18 @@ public class Engine implements ActionListener {
         setFeaturesButton(this.n7, ButtonType.REGULAR);
         setFeaturesButton(this.n8, ButtonType.REGULAR);
         setFeaturesButton(this.n9, ButtonType.REGULAR);
+        setFeaturesButton(this.B2, ButtonType.BASE);
+        setFeaturesButton(this.B8, ButtonType.BASE);
+        setFeaturesButton(this.B10, ButtonType.BASE);
+        setFeaturesButton(this.B16, ButtonType.BASE);
+        setFeaturesButton(this.A, ButtonType.HEXADECIMAL);
+        setFeaturesButton(this.B, ButtonType.HEXADECIMAL);
+        setFeaturesButton(this.C, ButtonType.HEXADECIMAL);
+        setFeaturesButton(this.D, ButtonType.HEXADECIMAL);
+        setFeaturesButton(this.E, ButtonType.HEXADECIMAL);
+        setFeaturesButton(this.F, ButtonType.HEXADECIMAL);
+        setFeaturesButton(this.INFO, ButtonType.ESPCIAL);
+        setFeaturesButton(this.Owner, ButtonType.ESPCIAL);
         setFeaturesButton(this.add, ButtonType.OPERATOR);
         setFeaturesButton(this.multiply, ButtonType.OPERATOR);
         setFeaturesButton(this.subtract, ButtonType.OPERATOR);
@@ -227,6 +281,19 @@ public class Engine implements ActionListener {
             _button.setBackground(new Color(255, 145, 0));
             _button.setFont(new Font("", Font.BOLD, 20));
             _button.setForeground(new Color(255, 251, 230));
+        } else if (_type.equals(ButtonType.BASE)) {
+            _button.setBackground(new Color(97, 245, 23));
+            _button.setFont(new Font("", Font.BOLD, 20));
+            _button.setForeground(new Color(255, 251, 230));
+        } else if (_type.equals(ButtonType.HEXADECIMAL)) {
+            _button.setBackground(new Color(215, 245, 23));
+            _button.setFont(new Font("", Font.BOLD, 20));
+            _button.setForeground(new Color(255, 251, 230));
+        } else if (_type.equals(ButtonType.ESPCIAL)) {
+            _button.setBackground(new Color(245, 87, 23));
+            _button.setFont(new Font("", Font.BOLD, 20));
+            _button.setForeground(new Color(255, 251, 230));
+
         } else {
             _button.setBackground(new Color(213, 237, 159));
             _button.setFont(new Font("", Font.BOLD, 20));
@@ -258,6 +325,18 @@ public class Engine implements ActionListener {
         this.negative.addActionListener(this);
         this.clearHistory.addActionListener(this);
         this.addToDisplay.addActionListener(this);
+        this.B2.addActionListener(this);
+        this.B8.addActionListener(this);
+        this.B10.addActionListener(this);
+        this.B16.addActionListener(this);
+        this.D.addActionListener(this);
+        this.E.addActionListener(this);
+        this.F.addActionListener(this);
+        this.A.addActionListener(this);
+        this.B.addActionListener(this);
+        this.C.addActionListener(this);
+        this.INFO.addActionListener(this);
+        this.Owner.addActionListener(this);
     }
 
     /**
@@ -277,14 +356,26 @@ public class Engine implements ActionListener {
             this.display.setText("0");
             this.calculo = "";
         } else if (source.equals(this.equal)) {
-            this.num1 = Integer.parseInt(cadena[0]);
-            this.num2 = Integer.parseInt(cadena[cadena.length - 1]);
+            if (this.modo == 4) {
+                this.num1 = Integer.parseInt(cadena[0], 16);
+                this.num2 = Integer.parseInt(cadena[cadena.length - 1], 16);
+            } else {
+                this.num1 = Integer.parseInt(cadena[0]);
+                this.num2 = Integer.parseInt(cadena[cadena.length - 1]);
+            }
+
             this.operation = cadena[cadena.length - 2];
             System.out.println(this.num1 + "/" + this.operation + "/" + this.num2);
             operation();
             this.calculo = this.result + "";
             this.display.setText(this.calculo);
-            this.listModel.addElement(this.num1 + " " + this.operation + " " + this.num2 + " = " + this.result);
+            if (this.modo == 4) {
+                String newresult = Integer.toHexString(this.result);
+                this.listModel.addElement(
+                        cadena[0] + " " + this.operation + " " + cadena[cadena.length - 1] + " = " + newresult);
+            } else {
+                this.listModel.addElement(this.num1 + " " + this.operation + " " + this.num2 + " = " + this.result);
+            }
         } else if (source.equals(this.negative)) {
             String cosota = "";
             cadena[cadena.length - 1] = "-" + cadena[cadena.length - 1];
@@ -301,6 +392,30 @@ public class Engine implements ActionListener {
             String seleccion[] = this.listModel.getElementAt(this.historyList.getSelectedIndex()).split(" ");
             this.calculo = seleccion[seleccion.length - 1];
             this.display.setText(this.calculo);
+        } else if (source.equals(this.B2)) {
+            this.modo = 2;
+            DialogMod(this.modo);
+        } else if (source.equals(this.B8)) {
+            this.modo = 3;
+            DialogMod(this.modo);
+        } else if (source.equals(this.B10)) {
+            this.modo = 1;
+            DialogMod(this.modo);
+        } else if (source.equals(this.B16)) {
+            this.modo = 4;
+            DialogMod(this.modo);
+
+        } else if (source.equals(this.INFO)) {
+
+        } else if (source.equals(this.Owner)) {
+            JDialog dialog1 = new JDialog(this.frame, "Dueño");
+            dialog1.setSize(500, 120);
+            dialog1.setLayout(new FlowLayout());
+            JLabel text1 = new JLabel("Creado por Oscar Nzabarinda Mukeshimana");
+            text1.setFont(new Font("", Font.BOLD, 15));
+            text1.setForeground(new Color(18, 198, 0));
+            dialog1.add(text1);
+            dialog1.setVisible(true);
         } else {
             this.calculo += input_text;
             this.display.setText(this.calculo);
@@ -308,23 +423,148 @@ public class Engine implements ActionListener {
     }
 
     /**
+     * Método que se encarga de crear el dialogo dependien del modo
+     */
+
+    public void DialogMod(int modo) {
+        switch (modo) {
+            case 1:
+                JDialog dialog1 = new JDialog(this.frame, "Decimal");
+                dialog1.setSize(500, 120);
+                dialog1.setLayout(new FlowLayout());
+                JLabel text1 = new JLabel("ESTAS EN MODO DECIMAL");
+                text1.setFont(new Font("", Font.BOLD, 30));
+                text1.setForeground(new Color(18, 198, 0));
+                dialog1.add(text1);
+                dialog1.setVisible(true);
+                break;
+            case 2:
+                JDialog dialog = new JDialog(this.frame, "Binario");
+                dialog.setSize(500, 120);
+                dialog.setLayout(new FlowLayout());
+                JLabel text = new JLabel("ESTAS EN MODO BIUNARIO");
+                text.setFont(new Font("", Font.BOLD, 30));
+                text.setForeground(new Color(18, 198, 0));
+                dialog.add(text);
+                dialog.setVisible(true);
+                break;
+            case 3:
+                JDialog dialog3 = new JDialog(this.frame, "Octal");
+                dialog3.setSize(500, 120);
+                dialog3.setLayout(new FlowLayout());
+                JLabel text3 = new JLabel("ESTAS EN MODO OCTAL");
+                text3.setFont(new Font("", Font.BOLD, 30));
+                text3.setForeground(new Color(18, 198, 0));
+                dialog3.add(text3);
+                dialog3.setVisible(true);
+                break;
+            case 4:
+                JDialog dialog4 = new JDialog(this.frame, "Hexadecimal");
+                dialog4.setSize(500, 120);
+                dialog4.setLayout(new FlowLayout());
+                JLabel text4 = new JLabel("ESTAS EN MODO HEXADECIMAL");
+                text4.setFont(new Font("", Font.BOLD, 30));
+                text4.setForeground(new Color(18, 198, 0));
+                dialog4.add(text4);
+                dialog4.setVisible(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
      * Comprueba qué operación se debe realizar
      */
     public void operation() {
-        switch (this.operation) {
-            case "x":
-                this.result = this.num1 * this.num2;
-                break;
-            case "/":
-                this.result = this.num1 / this.num2;
-                break;
-            case "+":
-                this.result = this.num1 + this.num2;
-                break;
-            case "-":
-                this.result = this.num1 - this.num2;
-                break;
+        switch (this.modo) {
+            case 1:
+                switch (this.operation) {
+                    case "x":
+                        this.result = this.num1 * this.num2;
+                        break;
+                    case "/":
+                        this.result = this.num1 / this.num2;
+                        break;
+                    case "+":
+                        this.result = this.num1 + this.num2;
+                        break;
+                    case "-":
+                        this.result = this.num1 - this.num2;
+                        break;
 
+                    default:
+                        break;
+                }
+                break;
+            case 2:
+                switch (this.operation) {
+                    case "x":
+                        this.result = Integer.parseInt(Integer.toBinaryString(this.num1), 2)
+                                * Integer.parseInt(Integer.toBinaryString(this.num2), 2);
+                        break;
+                    case "/":
+                        this.result = Integer.parseInt(Integer.toBinaryString(this.num1), 2)
+                                / Integer.parseInt(Integer.toBinaryString(this.num2), 2);
+                        break;
+                    case "+":
+                        this.result = Integer.parseInt(Integer.toBinaryString(this.num1), 2)
+                                + Integer.parseInt(Integer.toBinaryString(this.num2), 2);
+                        break;
+                    case "-":
+                        this.result = Integer.parseInt(Integer.toBinaryString(this.num1), 2)
+                                - Integer.parseInt(Integer.toBinaryString(this.num2), 2);
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
+            case 3:
+                switch (this.operation) {
+                    case "x":
+                        this.result = Integer.parseInt(Integer.toOctalString(this.num1), 8)
+                                * Integer.parseInt(Integer.toOctalString(this.num2), 8);
+                        break;
+                    case "/":
+                        this.result = Integer.parseInt(Integer.toOctalString(this.num1), 8)
+                                / Integer.parseInt(Integer.toOctalString(this.num2), 8);
+                        break;
+                    case "+":
+                        this.result = Integer.parseInt(Integer.toOctalString(this.num1), 8)
+                                + Integer.parseInt(Integer.toOctalString(this.num2), 8);
+                        break;
+                    case "-":
+                        this.result = Integer.parseInt(Integer.toOctalString(this.num1), 8)
+                                - Integer.parseInt(Integer.toOctalString(this.num2), 8);
+                        break;
+
+                    default:
+                        break;
+                }
+            case 4:
+                switch (this.operation) {
+                    case "x":
+                        this.result = Integer.parseInt(Integer.toHexString(this.num1), 16)
+                                * Integer.parseInt(Integer.toHexString(this.num2), 16);
+                        break;
+                    case "/":
+                        this.result = Integer.parseInt(Integer.toHexString(this.num1), 16)
+                                / Integer.parseInt(Integer.toHexString(this.num2), 16);
+                        break;
+                    case "+":
+                        this.result = Integer.parseInt(Integer.toHexString(this.num1), 16)
+                                + Integer.parseInt(Integer.toHexString(this.num2), 16);
+                        break;
+                    case "-":
+                        this.result = Integer.parseInt(Integer.toHexString(this.num1), 16)
+                                - Integer.parseInt(Integer.toHexString(this.num2), 16);
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
             default:
                 break;
         }
