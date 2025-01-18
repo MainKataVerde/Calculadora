@@ -359,6 +359,7 @@ public class Engine implements ActionListener {
         String cadena[] = this.display.getText().split(" ");
         Object source = e.getSource();
         String input_text = e.getActionCommand();
+        int oldmod = this.modo;
         if (source.equals(this.reset)) {
             this.display.setText("0");
             this.calculo = "";
@@ -401,17 +402,52 @@ public class Engine implements ActionListener {
             this.display.setText(this.calculo);
         } else if (source.equals(this.B2)) {
             this.modo = 2;
+            if (oldmod == 4) {
+                display.setText(Integer.toBinaryString(Integer.parseInt(display.getText(), 16)));
+            } else if (oldmod == 3) {
+                display.setText(Integer.toBinaryString(Integer.parseInt(display.getText(), 8)));
+            } else if (oldmod == 2) {
+                display.setText(Integer.toBinaryString(Integer.parseInt(display.getText(), 2)));
+            } else {
+                display.setText(display.getText());
+            }
             DialogMod(this.modo);
         } else if (source.equals(this.B8)) {
             this.modo = 3;
+            if (oldmod == 4) {
+                display.setText(Integer.toOctalString(Integer.parseInt(display.getText(), 16)));
+            } else if (oldmod == 3) {
+                display.setText(Integer.toOctalString(Integer.parseInt(display.getText(), 8)));
+            } else if (oldmod == 2) {
+                display.setText(Integer.toOctalString(Integer.parseInt(display.getText(), 2)));
+            } else {
+                display.setText(display.getText());
+            }
             DialogMod(this.modo);
         } else if (source.equals(this.B10)) {
             this.modo = 1;
+            if (oldmod == 4) {
+                display.setText(Integer.parseInt(display.getText(), 16) + "");
+            } else if (oldmod == 3) {
+                display.setText(Integer.parseInt(display.getText(), 8) + "");
+            } else if (oldmod == 2) {
+                display.setText(Integer.parseInt(display.getText(), 2) + "");
+            } else {
+                display.setText(display.getText());
+            }
             DialogMod(this.modo);
         } else if (source.equals(this.B16)) {
             this.modo = 4;
+            if (oldmod == 4) {
+                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 16)));
+            } else if (oldmod == 3) {
+                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 8)));
+            } else if (oldmod == 2) {
+                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 2)));
+            } else {
+                display.setText(display.getText());
+            }
             DialogMod(this.modo);
-
         } else if (source.equals(this.INFO)) {
 
         } else if (source.equals(this.Owner)) {
