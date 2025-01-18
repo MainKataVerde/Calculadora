@@ -9,11 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -22,6 +20,10 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 
 /**
  * Clase que en la que se va a ejecuta toda la mecanica de la calculadora
@@ -73,6 +75,7 @@ public class Engine implements ActionListener {
     private JButton A;
     private JButton B;
     private JButton C;
+    private JButton COPY;
     private JButton INFO;
     private JButton Owner;
     private JButton divide;
@@ -124,6 +127,7 @@ public class Engine implements ActionListener {
         this.scroll = new JScrollPane(this.historyList);
         // Botones
         this.n0 = new JButton("0");
+        this.COPY = new JButton("Copiar resultado");
         this.n1 = new JButton("1");
         this.n2 = new JButton("2");
         this.n3 = new JButton("3");
@@ -190,6 +194,7 @@ public class Engine implements ActionListener {
         this.historyPanelSur.setLayout(new FlowLayout());
         this.historyPanelSur.add(this.clearHistory);
         this.historyPanelSur.add(this.addToDisplay);
+        this.historyPanelSur.add(this.COPY);
         this.historyPanel.add(this.historyPanelSur, BorderLayout.SOUTH);
         this.historyPanel.add(this.scroll, BorderLayout.CENTER);
         // añimos panel de texto al display
@@ -262,11 +267,12 @@ public class Engine implements ActionListener {
         setFeaturesButton(this.negative, ButtonType.OPERATOR);
         setFeaturesButton(this.addToDisplay, ButtonType.OPERATOR);
         setFeaturesButton(this.clearHistory, ButtonType.OPERATOR);
+        setFeaturesButton(this.COPY, ButtonType.OPERATOR);
         // configuracion de la ventana
         this.frame.add(this.contentPanel);
         this.frame.setVisible(true);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.frame.setSize(new Dimension(1000, 700));
+        this.frame.setSize(new Dimension(1500, 700));
     }
 
     /**
@@ -337,6 +343,7 @@ public class Engine implements ActionListener {
         this.C.addActionListener(this);
         this.INFO.addActionListener(this);
         this.Owner.addActionListener(this);
+        this.COPY.addActionListener(this);
     }
 
     /**
@@ -409,9 +416,22 @@ public class Engine implements ActionListener {
 
         } else if (source.equals(this.Owner)) {
             JDialog dialog1 = new JDialog(this.frame, "Dueño");
-            dialog1.setSize(500, 120);
+            dialog1.setSize(500, 90);
             dialog1.setLayout(new FlowLayout());
             JLabel text1 = new JLabel("Creado por Oscar Nzabarinda Mukeshimana");
+            text1.setFont(new Font("", Font.BOLD, 15));
+            text1.setForeground(new Color(18, 198, 0));
+            dialog1.add(text1);
+            dialog1.setVisible(true);
+        } else if (source.equals(this.COPY)) {
+            String myString = this.display.getText();
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            StringSelection strse1 = new StringSelection(myString);
+            clipboard.setContents(strse1, strse1);
+            JDialog dialog1 = new JDialog(this.frame, "Copy");
+            dialog1.setSize(300, 90);
+            dialog1.setLayout(new FlowLayout());
+            JLabel text1 = new JLabel("Resultado copiado al porta papeles");
             text1.setFont(new Font("", Font.BOLD, 15));
             text1.setForeground(new Color(18, 198, 0));
             dialog1.add(text1);
