@@ -477,29 +477,15 @@ public class Engine implements ActionListener {
             }
             DialogMod(this.modo);
         } else if (source.equals(this.INFO)) {
-
+            VentanaEmergente info = new VentanaEmergente("Info", "Calculadora con cambio de base");
         } else if (source.equals(this.Owner)) {
-            JDialog dialog1 = new JDialog(this.frame, "Dueño");
-            dialog1.setSize(500, 90);
-            dialog1.setLayout(new FlowLayout());
-            JLabel text1 = new JLabel("Creado por Oscar Nzabarinda Mukeshimana");
-            text1.setFont(new Font("", Font.BOLD, 15));
-            text1.setForeground(new Color(18, 198, 0));
-            dialog1.add(text1);
-            dialog1.setVisible(true);
+            VentanaEmergente owner = new VentanaEmergente("Owner", "Creado por: Oscar Nzabarinda Mukeshimana");
         } else if (source.equals(this.COPY)) {
             String myString = this.display.getText();
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             StringSelection strse1 = new StringSelection(myString);
             clipboard.setContents(strse1, strse1);
-            JDialog dialog1 = new JDialog(this.frame, "Copy");
-            dialog1.setSize(300, 90);
-            dialog1.setLayout(new FlowLayout());
-            JLabel text1 = new JLabel("Resultado copiado al porta papeles");
-            text1.setFont(new Font("", Font.BOLD, 15));
-            text1.setForeground(new Color(18, 198, 0));
-            dialog1.add(text1);
-            dialog1.setVisible(true);
+            VentanaEmergente copy = new VentanaEmergente("Copy", "Se ha copiado el resultado");
         } else {
             this.calculo += input_text;
             this.display.setText(this.calculo);
@@ -507,9 +493,10 @@ public class Engine implements ActionListener {
     }
 
     /**
-     * Método que se encarga de crear el dialogo dependien del modo
+     * Este método se encarga de mostrar una ventana emergente
+     * 
+     * @param modo Modo en el que se encuentra la calculadora
      */
-
     public void DialogMod(int modo) {
         switch (modo) {
             case 1:
