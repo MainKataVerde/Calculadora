@@ -9,9 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -85,10 +87,11 @@ public class Engine implements ActionListener {
     private JButton equal;
     private JButton reset;
     private JButton negative;
+    private JButton CASIO;
 
     // Tipos de boton
     private enum ButtonType {
-        REGULAR, OPERATOR, BASE, ESPCIAL, HEXADECIMAL
+        REGULAR, OPERATOR, BASE, ESPCIAL, HEXADECIMAL, MARCA
     }
 
     // Almacenar temporalmente ciertos valores
@@ -156,6 +159,7 @@ public class Engine implements ActionListener {
         this.negative = new JButton("N");
         this.INFO = new JButton("INFO");
         this.Owner = new JButton("Owner");
+        this.CASIO = new JButton("CASIO");
         this.calculo = "";
         this.addToDisplay = new JButton("Usar para calculo");
         this.clearHistory = new JButton("Borrar historial");
@@ -197,6 +201,7 @@ public class Engine implements ActionListener {
         this.historyPanelSur.add(this.COPY);
         this.historyPanel.add(this.historyPanelSur, BorderLayout.SOUTH);
         this.historyPanel.add(this.scroll, BorderLayout.CENTER);
+        this.historyPanel.add(this.CASIO, BorderLayout.NORTH);
         // añimos panel de texto al display
         this.displayPanel.add(this.display);
         // añadimos los botones
@@ -268,6 +273,7 @@ public class Engine implements ActionListener {
         setFeaturesButton(this.addToDisplay, ButtonType.OPERATOR);
         setFeaturesButton(this.clearHistory, ButtonType.OPERATOR);
         setFeaturesButton(this.COPY, ButtonType.OPERATOR);
+        setFeaturesButton(this.CASIO, ButtonType.MARCA);
         // configuracion de la ventana
         this.frame.add(this.contentPanel);
         this.frame.setVisible(true);
@@ -283,6 +289,23 @@ public class Engine implements ActionListener {
      *                las características
      */
     public void setFeaturesButton(JButton _button, ButtonType _type) {
+
+        _button.setBorder(new Border() {
+            @Override
+            public void paintBorder(Component c, java.awt.Graphics g, int x, int y, int width, int height) {
+            }
+
+            @Override
+            public boolean isBorderOpaque() {
+                return false;
+            }
+
+            @Override
+            public java.awt.Insets getBorderInsets(Component c) {
+                return new java.awt.Insets(0, 0, 0, 0);
+            }
+        });
+
         if (_type.equals(ButtonType.OPERATOR)) {
             _button.setBackground(new Color(255, 145, 0));
             _button.setFont(new Font("", Font.BOLD, 20));
@@ -296,7 +319,12 @@ public class Engine implements ActionListener {
             _button.setFont(new Font("", Font.BOLD, 20));
             _button.setForeground(new Color(255, 251, 230));
         } else if (_type.equals(ButtonType.ESPCIAL)) {
-            _button.setBackground(new Color(245, 87, 23));
+            _button.setBackground(new Color(247, 254, 14));
+            _button.setFont(new Font("", Font.BOLD, 20));
+            _button.setForeground(new Color(255, 251, 230));
+
+        } else if (_type.equals(ButtonType.MARCA)) {
+            _button.setBackground(new Color(0, 113, 45));
             _button.setFont(new Font("", Font.BOLD, 20));
             _button.setForeground(new Color(255, 251, 230));
 
@@ -625,4 +653,7 @@ public class Engine implements ActionListener {
                 break;
         }
     }
+
+    // optimizar el cambio de base
+    // leer el pdf
 }
