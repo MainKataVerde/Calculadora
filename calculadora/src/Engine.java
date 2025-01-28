@@ -1,7 +1,6 @@
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -408,9 +407,11 @@ public class Engine implements ActionListener {
 
             if (this.modo == 4) {
                 String newresult = Integer.toHexString(this.result).toUpperCase();
+                this.calculo = newresult;
                 this.display.setText(newresult);
                 this.listModel.addElement(
                         cadena[0] + " " + this.operation + " " + cadena[cadena.length - 1] + " = " + newresult);
+                System.out.println(display.getText());
             } else {
                 this.calculo = this.result + "";
                 this.display.setText(this.calculo);
@@ -434,43 +435,52 @@ public class Engine implements ActionListener {
             this.display.setText(this.calculo);
         } else if (source.equals(this.B2)) {
             int oldmod = this.modo;
-            System.out.println(oldmod);
             if (oldmod == 4) {
-                display.setText(Integer.toBinaryString(Integer.parseInt(display.getText(), 16)));
+                this.calculo = Integer.toBinaryString(Integer.parseInt(display.getText(), 16));
+                display.setText(this.calculo);
             } else if (oldmod == 3) {
-                display.setText(Integer.toBinaryString(Integer.parseInt(display.getText(), 8)));
+                this.calculo = Integer.toBinaryString(Integer.parseInt(display.getText(), 8));
+                display.setText(this.calculo);
             } else if (oldmod == 2) {
-                display.setText(Integer.toBinaryString(Integer.parseInt(display.getText(), 10)));
+                this.calculo = Integer.toBinaryString(Integer.parseInt(display.getText(), 10));
+                display.setText(this.calculo);
             } else {
-                display.setText(display.getText());
+                this.calculo = display.getText();
+                display.setText(this.calculo);
             }
             this.modo = 2;
             DialogMod(this.modo);
         } else if (source.equals(this.B8)) {
             int oldmod = this.modo;
-            System.out.println(oldmod);
             if (oldmod == 4) {
-                display.setText(Integer.toOctalString(Integer.parseInt(display.getText(), 16)));
+                this.calculo = Integer.toOctalString(Integer.parseInt(display.getText(), 16));
+                display.setText(this.calculo);
             } else if (oldmod == 1) {
-                display.setText(Integer.toOctalString(Integer.parseInt(display.getText(), 10)));
+                this.calculo = Integer.toOctalString(Integer.parseInt(display.getText(), 10));
+                display.setText(this.calculo);
             } else if (oldmod == 2) {
-                display.setText(Integer.toOctalString(Integer.parseInt(display.getText(), 2)));
+                this.calculo = Integer.toOctalString(Integer.parseInt(display.getText(), 2));
+                display.setText(this.calculo);
             } else {
-                display.setText(display.getText());
+                this.calculo = display.getText();
+                display.setText(this.calculo);
             }
             this.modo = 3;
             DialogMod(this.modo);
         } else if (source.equals(this.B10)) {
             int oldmod = this.modo;
-            System.out.println(oldmod);
             if (oldmod == 4) {
-                display.setText(Integer.parseInt(display.getText(), 16) + "");
+                this.calculo = Integer.parseInt(display.getText(), 16) + "";
+                display.setText(this.calculo);
             } else if (oldmod == 3) {
-                display.setText(Integer.parseInt(display.getText(), 8) + "");
+                this.calculo = Integer.parseInt(display.getText(), 8) + "";
+                display.setText(this.calculo);
             } else if (oldmod == 2) {
-                display.setText(Integer.parseInt(display.getText(), 2) + "");
+                this.calculo = Integer.parseInt(display.getText(), 2) + "";
+                display.setText(this.calculo);
             } else {
-                display.setText(display.getText());
+                this.calculo = display.getText();
+                display.setText(this.calculo);
             }
             this.modo = 1;
             DialogMod(this.modo);
@@ -478,13 +488,17 @@ public class Engine implements ActionListener {
             int oldmod = this.modo;
             System.out.println(oldmod);
             if (oldmod == 1) {
-                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 10)).toUpperCase());
+                this.calculo = Integer.toHexString(Integer.parseInt(display.getText(), 10)).toUpperCase();
+                display.setText(this.calculo);
             } else if (oldmod == 3) {
-                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 8)).toUpperCase());
+                this.calculo = Integer.toHexString(Integer.parseInt(display.getText(), 8)).toUpperCase();
+                display.setText(this.calculo);
             } else if (oldmod == 2) {
-                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 2)).toUpperCase());
+                this.calculo = Integer.toHexString(Integer.parseInt(display.getText(), 2)).toUpperCase();
+                display.setText(this.calculo);
             } else {
-                display.setText(display.getText());
+                this.calculo = display.getText();
+                display.setText(this.calculo);
             }
             this.modo = 4;
             DialogMod(this.modo);

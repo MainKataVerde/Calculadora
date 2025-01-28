@@ -90,7 +90,7 @@ Su funcionamiento es sencillo , primero hay que usar poner el numero y luego dec
 
 <img src="./readme/2024-12-30 22-59-14.gif" width="400" height="250">
 
-# NEW VERSION
+# NEW VERSION (28-01-2025)
 
 ## Cambios
 
@@ -105,5 +105,11 @@ Como se puede ver en la parte superior de los numeros tenemos dos nuevas partes 
 Con este nuevo boton nos permite copar el resultado que tenemos en el display actalmente y ponerlo en el porta papeles , displonible para comiarlo dentro de cualquier texto
 
 <img  src="https://github.com/MainKataVerde/Calculadora/blob/main/readme/Interfaz4.PNG" width="400" height="250">
+
+# Ejemplo de uso
+
+<img  src="./readme/2025-01-2820-26-18-ezgif.com-video-to-gif-converter.gif" width="400" height="250">
+
+Aqui se puede ver un ejemplo de cambio de base y de uso de la calculadora con las diferente sumas en todas las bases
 
 </div>
