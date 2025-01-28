@@ -3,14 +3,13 @@
   
   # Calculadora ☝🤓
 
-
 Esta es una calculdora sencilla con un historial de operaciones.
 
 [Descripción](#Descripción) || [Interfaz Grafica](#Interfaz-Grafica) || [Ejemplo de uso](#Ejemplo-de-uso) || [Historial de Operaciones](#Historial-de-Operaciones)
 
 Autor : **[Oscar Nzabarinda Mukeshimana](https://github.com/MainKataVerde)**
 
-</div>  
+</div>
 
 ## Lenguaje Usado
 
@@ -79,9 +78,7 @@ Aqui tenemos un ejemplo de uso del historial de la calculadora.
 
 #### Historial de Operaciones
 
-
 Como hemos visto en el ejemplo grafico anterior , el historial de operaciones se compone de dos botones uno que como se vio borra el historial y el otro importa el resultado de la oparacion seleccionada a la calculadora.
-
 
 #### Numeros negativos
 
@@ -93,7 +90,20 @@ Su funcionamiento es sencillo , primero hay que usar poner el numero y luego dec
 
 <img src="./readme/2024-12-30 22-59-14.gif" width="400" height="250">
 
-# GRACIAS POR LEER ESPERO QUE TE GUSTE MI CALCULADORA
+# NEW VERSION
+
+## Cambios
+
+Ahora la calculadora tiene cambios de base , entre ellos se encuentra el hexadecimal , binario , octal y como en la antigua version el decimal , esta misma no cambio si diseño , lo que pasa es que ahora mismo tenemos que indicar en que modo queremos la calculadora . Aqui una foto de ejemplo de la nueva calculadora :
+
+<img  src="https://github.com/MainKataVerde/Calculadora/blob/main/readme/Interfaz3.PNG" width="400" height="250">
+
+Como se puede ver en la parte superior de los numeros tenemos dos nuevas partes , la que indica las letras pertenecientes al hexadecimal y la parte en la que se pueden elegir las bases
+
+### Copia de resultados
+
+Con este nuevo boton nos permite copar el resultado que tenemos en el display actalmente y ponerlo en el porta papeles , displonible para comiarlo dentro de cualquier texto
+
+<img  src="https://github.com/MainKataVerde/Calculadora/blob/main/readme/Interfaz4.PNG" width="400" height="250">
 
 </div>
-

@@ -22,7 +22,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -98,7 +100,7 @@ public class Engine implements ActionListener {
     private int num1, num2, result;
     // MODO = 1 -> DECIMAL , MODO = 2 -> BINARIO , MODO = 3 -> OCTAL , MODO = 4 ->
     // HEXADECIMAL
-    private int modo;
+    private int modo = 1;
     private String operation;
     // String con los elemento para calcular
     private String calculo;
@@ -372,6 +374,7 @@ public class Engine implements ActionListener {
         this.INFO.addActionListener(this);
         this.Owner.addActionListener(this);
         this.COPY.addActionListener(this);
+        this.CASIO.addActionListener(this);
     }
 
     /**
@@ -387,7 +390,6 @@ public class Engine implements ActionListener {
         String cadena[] = this.display.getText().split(" ");
         Object source = e.getSource();
         String input_text = e.getActionCommand();
-        int oldmod = this.modo;
         if (source.equals(this.reset)) {
             this.display.setText("0");
             this.calculo = "";
@@ -403,13 +405,15 @@ public class Engine implements ActionListener {
             this.operation = cadena[cadena.length - 2];
             System.out.println(this.num1 + "/" + this.operation + "/" + this.num2);
             operation();
-            this.calculo = this.result + "";
-            this.display.setText(this.calculo);
+
             if (this.modo == 4) {
-                String newresult = Integer.toHexString(this.result);
+                String newresult = Integer.toHexString(this.result).toUpperCase();
+                this.display.setText(newresult);
                 this.listModel.addElement(
                         cadena[0] + " " + this.operation + " " + cadena[cadena.length - 1] + " = " + newresult);
             } else {
+                this.calculo = this.result + "";
+                this.display.setText(this.calculo);
                 this.listModel.addElement(this.num1 + " " + this.operation + " " + this.num2 + " = " + this.result);
             }
         } else if (source.equals(this.negative)) {
@@ -429,31 +433,36 @@ public class Engine implements ActionListener {
             this.calculo = seleccion[seleccion.length - 1];
             this.display.setText(this.calculo);
         } else if (source.equals(this.B2)) {
-            this.modo = 2;
+            int oldmod = this.modo;
+            System.out.println(oldmod);
             if (oldmod == 4) {
                 display.setText(Integer.toBinaryString(Integer.parseInt(display.getText(), 16)));
             } else if (oldmod == 3) {
                 display.setText(Integer.toBinaryString(Integer.parseInt(display.getText(), 8)));
             } else if (oldmod == 2) {
-                display.setText(Integer.toBinaryString(Integer.parseInt(display.getText(), 2)));
+                display.setText(Integer.toBinaryString(Integer.parseInt(display.getText(), 10)));
             } else {
                 display.setText(display.getText());
             }
+            this.modo = 2;
             DialogMod(this.modo);
         } else if (source.equals(this.B8)) {
-            this.modo = 3;
+            int oldmod = this.modo;
+            System.out.println(oldmod);
             if (oldmod == 4) {
                 display.setText(Integer.toOctalString(Integer.parseInt(display.getText(), 16)));
-            } else if (oldmod == 3) {
-                display.setText(Integer.toOctalString(Integer.parseInt(display.getText(), 8)));
+            } else if (oldmod == 1) {
+                display.setText(Integer.toOctalString(Integer.parseInt(display.getText(), 10)));
             } else if (oldmod == 2) {
                 display.setText(Integer.toOctalString(Integer.parseInt(display.getText(), 2)));
             } else {
                 display.setText(display.getText());
             }
+            this.modo = 3;
             DialogMod(this.modo);
         } else if (source.equals(this.B10)) {
-            this.modo = 1;
+            int oldmod = this.modo;
+            System.out.println(oldmod);
             if (oldmod == 4) {
                 display.setText(Integer.parseInt(display.getText(), 16) + "");
             } else if (oldmod == 3) {
@@ -463,18 +472,21 @@ public class Engine implements ActionListener {
             } else {
                 display.setText(display.getText());
             }
+            this.modo = 1;
             DialogMod(this.modo);
         } else if (source.equals(this.B16)) {
-            this.modo = 4;
-            if (oldmod == 4) {
-                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 16)));
+            int oldmod = this.modo;
+            System.out.println(oldmod);
+            if (oldmod == 1) {
+                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 10)).toUpperCase());
             } else if (oldmod == 3) {
-                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 8)));
+                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 8)).toUpperCase());
             } else if (oldmod == 2) {
-                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 2)));
+                display.setText(Integer.toHexString(Integer.parseInt(display.getText(), 2)).toUpperCase());
             } else {
                 display.setText(display.getText());
             }
+            this.modo = 4;
             DialogMod(this.modo);
         } else if (source.equals(this.INFO)) {
             VentanaEmergente info = new VentanaEmergente("Info", "Calculadora con cambio de base");
@@ -486,6 +498,12 @@ public class Engine implements ActionListener {
             StringSelection strse1 = new StringSelection(myString);
             clipboard.setContents(strse1, strse1);
             VentanaEmergente copy = new VentanaEmergente("Copy", "Se ha copiado el resultado");
+        } else if (source.equals(this.CASIO)) {
+            try {
+                java.awt.Desktop.getDesktop().browse(new URI("https://www.casio.com/es/scientific-calculators/"));
+            } catch (IOException | URISyntaxException e1) {
+                e1.printStackTrace();
+            }
         } else {
             this.calculo += input_text;
             this.display.setText(this.calculo);
@@ -500,44 +518,16 @@ public class Engine implements ActionListener {
     public void DialogMod(int modo) {
         switch (modo) {
             case 1:
-                JDialog dialog1 = new JDialog(this.frame, "Decimal");
-                dialog1.setSize(500, 120);
-                dialog1.setLayout(new FlowLayout());
-                JLabel text1 = new JLabel("ESTAS EN MODO DECIMAL");
-                text1.setFont(new Font("", Font.BOLD, 30));
-                text1.setForeground(new Color(18, 198, 0));
-                dialog1.add(text1);
-                dialog1.setVisible(true);
+                VentanaEmergente b2 = new VentanaEmergente("Decimal", "ESTAS EN MODO DECIMAL");
                 break;
             case 2:
-                JDialog dialog = new JDialog(this.frame, "Binario");
-                dialog.setSize(500, 120);
-                dialog.setLayout(new FlowLayout());
-                JLabel text = new JLabel("ESTAS EN MODO BIUNARIO");
-                text.setFont(new Font("", Font.BOLD, 30));
-                text.setForeground(new Color(18, 198, 0));
-                dialog.add(text);
-                dialog.setVisible(true);
+                VentanaEmergente b10 = new VentanaEmergente("Binario", "ESTAS EN MODO BIUNARIO");
                 break;
             case 3:
-                JDialog dialog3 = new JDialog(this.frame, "Octal");
-                dialog3.setSize(500, 120);
-                dialog3.setLayout(new FlowLayout());
-                JLabel text3 = new JLabel("ESTAS EN MODO OCTAL");
-                text3.setFont(new Font("", Font.BOLD, 30));
-                text3.setForeground(new Color(18, 198, 0));
-                dialog3.add(text3);
-                dialog3.setVisible(true);
+                VentanaEmergente b8 = new VentanaEmergente("Binario", "ESTAS EN MODO OCTAL");
                 break;
             case 4:
-                JDialog dialog4 = new JDialog(this.frame, "Hexadecimal");
-                dialog4.setSize(500, 120);
-                dialog4.setLayout(new FlowLayout());
-                JLabel text4 = new JLabel("ESTAS EN MODO HEXADECIMAL");
-                text4.setFont(new Font("", Font.BOLD, 30));
-                text4.setForeground(new Color(18, 198, 0));
-                dialog4.add(text4);
-                dialog4.setVisible(true);
+                VentanaEmergente b16 = new VentanaEmergente("Binario", "ESTAS EN MODO HEXADECIMAL");
                 break;
             default:
                 break;
@@ -571,20 +561,20 @@ public class Engine implements ActionListener {
             case 2:
                 switch (this.operation) {
                     case "x":
-                        this.result = Integer.parseInt(Integer.toBinaryString(this.num1), 2)
-                                * Integer.parseInt(Integer.toBinaryString(this.num2), 2);
+                        this.result = Integer.parseInt(Integer.toBinaryString(
+                                Integer.parseInt(this.num1 + "", 2) * Integer.parseInt(this.num2 + "", 2)));
                         break;
                     case "/":
-                        this.result = Integer.parseInt(Integer.toBinaryString(this.num1), 2)
-                                / Integer.parseInt(Integer.toBinaryString(this.num2), 2);
+                        this.result = Integer.parseInt(Integer.toBinaryString(
+                                Integer.parseInt(this.num1 + "", 2) / Integer.parseInt(this.num2 + "", 2)));
                         break;
                     case "+":
-                        this.result = Integer.parseInt(Integer.toBinaryString(this.num1), 2)
-                                + Integer.parseInt(Integer.toBinaryString(this.num2), 2);
+                        this.result = Integer.parseInt(Integer.toBinaryString(
+                                Integer.parseInt(this.num1 + "", 2) + Integer.parseInt(this.num2 + "", 2)));
                         break;
                     case "-":
-                        this.result = Integer.parseInt(Integer.toBinaryString(this.num1), 2)
-                                - Integer.parseInt(Integer.toBinaryString(this.num2), 2);
+                        this.result = Integer.parseInt(Integer.toBinaryString(
+                                Integer.parseInt(this.num1 + "", 2) - Integer.parseInt(this.num2 + "", 2)));
                         break;
 
                     default:
@@ -594,20 +584,20 @@ public class Engine implements ActionListener {
             case 3:
                 switch (this.operation) {
                     case "x":
-                        this.result = Integer.parseInt(Integer.toOctalString(this.num1), 8)
-                                * Integer.parseInt(Integer.toOctalString(this.num2), 8);
+                        this.result = Integer.parseInt(Integer.toBinaryString(
+                                Integer.parseInt(this.num1 + "", 8) + Integer.parseInt(this.num2 + "", 8)));
                         break;
                     case "/":
-                        this.result = Integer.parseInt(Integer.toOctalString(this.num1), 8)
-                                / Integer.parseInt(Integer.toOctalString(this.num2), 8);
+                        this.result = Integer.parseInt(Integer.toBinaryString(
+                                Integer.parseInt(this.num1 + "", 8) / Integer.parseInt(this.num2 + "", 8)));
                         break;
                     case "+":
-                        this.result = Integer.parseInt(Integer.toOctalString(this.num1), 8)
-                                + Integer.parseInt(Integer.toOctalString(this.num2), 8);
+                        this.result = Integer.parseInt(Integer.toBinaryString(
+                                Integer.parseInt(this.num1 + "", 8) + Integer.parseInt(this.num2 + "", 8)));
                         break;
                     case "-":
-                        this.result = Integer.parseInt(Integer.toOctalString(this.num1), 8)
-                                - Integer.parseInt(Integer.toOctalString(this.num2), 8);
+                        this.result = Integer.parseInt(Integer.toBinaryString(
+                                Integer.parseInt(this.num1 + "", 8) - Integer.parseInt(this.num2 + "", 8)));
                         break;
 
                     default:
@@ -639,8 +629,8 @@ public class Engine implements ActionListener {
             default:
                 break;
         }
+        System.out.println(modo);
     }
-
     // optimizar el cambio de base
     // leer el pdf
 }
